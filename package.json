@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Core JS 101",
   "scripts": {
+    "lint-fix": "eslint ./src --fix",
     "test": "npm run lint && mocha",
     "lint": "node node_modules/eslint/bin/eslint.js ./src"
   },
