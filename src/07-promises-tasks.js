@@ -58,12 +58,9 @@ function willYouMarryMe(isPositiveAnswer) {
  *
  */
 
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
-  // return new Promise((res) => {
-  //   const temp = array.map((p) => p.then((r) => r));
-  //   res(temp);
-  // });
+function processAllPromises(array) {
+  // throw new Error('Not implemented');
+  return Promise.all(array);
 }
 
 /**
@@ -85,8 +82,9 @@ function processAllPromises(/* array */) {
  *    })
  *
  */
-function getFastestPromise(/* array */) {
-  throw new Error('Not implemented');
+function getFastestPromise(array) {
+  // throw new Error('Not implemented');
+  return Promise.race(array);
 }
 
 /**
@@ -108,6 +106,7 @@ function getFastestPromise(/* array */) {
  */
 function chainPromises(/* array, action */) {
   throw new Error('Not implemented');
+  // return Promise.all(array).map((r) => action(r));
 }
 
 module.exports = {
