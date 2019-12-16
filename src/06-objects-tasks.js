@@ -55,8 +55,10 @@ function getJSON(obj) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  // throw new Error('Not implemented');
+  const obj = JSON.parse(json);
+  return new proto.constructor(...Object.values(obj));
 }
 
 
@@ -68,13 +70,13 @@ function fromJSON(/* proto, json */) {
  *
  *    element#id.class[attr]:pseudoClass::pseudoElement
  *              \----/\----/\----------/
- *              Can be several occurences
+ *              Can be several occurrences
  *
  * All types of selectors can be combined using the combinators ' ','+','~','>' .
  *
  * The task is to design a single class, independent classes or classes hierarchy
  * and implement the functionality to build the css selectors using the provided cssSelectorBuilder.
- * Each selector should have the stringify() method to output the string repsentation
+ * Each selector should have the stringify() method to output the string representation
  * according to css specification.
  *
  * Provided cssSelectorBuilder should be used as facade only to create your own classes,
