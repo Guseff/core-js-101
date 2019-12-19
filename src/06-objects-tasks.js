@@ -117,32 +117,96 @@ function fromJSON(proto, json) {
  */
 
 const cssSelectorBuilder = {
-  element(/* value */) {
-    throw new Error('Not implemented');
+  res: '',
+  bits: new Array(6).fill(false),
+
+  checkCallOnce(bit) {
+    if (this.bits[bit]) throw new Error('Element, id and pseudo-element should not occur more then one time inside the selector');
   },
 
-  id(/* value */) {
-    throw new Error('Not implemented');
+  checkOrder(bit) {
+    for (let i = bit + 1; i < this.bits.length; i += 1) {
+      if (this.bits[i]) throw new Error('Selector parts should be arranged in the following order: element, id, class, attribute, pseudo-class, pseudo-element');
+    }
   },
 
-  class(/* value */) {
-    throw new Error('Not implemented');
+  createNewObj(obj, bit) {
+    const newObj = { ...obj };
+    newObj.bits = obj.bits.slice();
+    newObj.bits[bit] = true;
+    return newObj;
   },
 
-  attr(/* value */) {
-    throw new Error('Not implemented');
+  element(value) {
+    this.checkCallOnce(0);
+    this.checkOrder(0);
+
+    const obj = this.createNewObj(this, 0);
+    obj.res += `${value}`;
+
+    return obj;
   },
 
-  pseudoClass(/* value */) {
-    throw new Error('Not implemented');
+  id(value) {
+    this.checkCallOnce(1);
+    this.checkOrder(1);
+
+    const obj = this.createNewObj(this, 1);
+    obj.res += `#${value}`;
+
+    return obj;
   },
 
-  pseudoElement(/* value */) {
-    throw new Error('Not implemented');
+  class(value) {
+    this.checkOrder(2);
+
+    const obj = this.createNewObj(this, 2);
+    obj.res += `.${value}`;
+
+    return obj;
   },
 
-  combine(/* selector1, combinator, selector2 */) {
-    throw new Error('Not implemented');
+  attr(value) {
+    this.checkOrder(3);
+
+    const obj = this.createNewObj(this, 3);
+    obj.res += `[${value}]`;
+
+    return obj;
+  },
+
+  pseudoClass(value) {
+    this.checkOrder(4);
+
+    const obj = this.createNewObj(this, 4);
+    obj.res += `:${value}`;
+
+    return obj;
+  },
+
+  pseudoElement(value) {
+    this.checkCallOnce(5);
+    this.checkOrder(5);
+
+    const obj = this.createNewObj(this, 5);
+    obj.res += `::${value}`;
+
+    return obj;
+  },
+
+  combine(selector1, combinator, selector2) {
+    const temp1 = selector1.stringify();
+    const temp2 = selector2.stringify();
+    this.res = `${temp1} ${combinator} ${temp2}`;
+
+    return this;
+  },
+
+  stringify() {
+    const str = this.res;
+    this.res = '';
+
+    return str;
   },
 };
 
